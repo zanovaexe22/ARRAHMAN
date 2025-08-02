@@ -1,0 +1,293 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  /* Updated background to your specified image */
+  background-image: url('https://images.unsplash.com/photo-1662638600476-d563fffbb072?q=80&w=870&auto=format& fit=pangkas&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  margin: 0;
+  color: #ffffff;
+  /* overflow-x: hidden; */ /* Ini bisa dihapus jika tidak ada lagi animasi horizontal */
+}
+
+nav {
+  /* Transparent background with blur for navigation bar, no color */
+  background: transparent; /* Remove the background color */
+  backdrop-filter: blur(8px); /* Blur effect */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transition for background and shadow */
+}
+
+nav.scrolled {
+  background: rgba(0, 0, 0, 0.7); /* Darker background when scrolled */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.3em;
+  letter-spacing: 1px;
+  margin-right: auto;
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: translateX(-20px); */ /* Hapus ini */
+  /* animation: slideInLeft 0.5s forwards; */ /* Hapus ini */
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: translateY(-20px); */ /* Hapus ini */
+  /* animation: slideInTop 0.5s forwards; */ /* Hapus ini */
+}
+
+/* Hapus bagian ini jika tidak ada lagi staggering animation */
+/* nav ul li:nth-child(1) { animation-delay: 0.1s; } */
+/* nav ul li:nth-child(2) { animation-delay: 0.2s; } */
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background .2s, transform 0.2s ease-in-out; /* Add transform for hover animation */
+}
+
+nav ul li a.active, nav ul li a:hover {
+  background: #024c9c;
+  transform: translateY(-3px); /* Slightly lift on hover */
+}
+
+main {
+  max-width: 600px;
+  margin: 40px auto 0 auto;
+  /* Transparent background with blur for main content box, no color */
+  background: transparent; /* Remove the background color */
+  backdrop-filter: blur(8px); /* Blur effect */
+  border-radius: 10px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 12px rgb(255, 255, 255);
+}
+
+.profile-img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 18px;
+  border: 4px solid #eaeaea;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: translateY(20px); */ /* Hapus ini */
+  /* transition: opacity 0.6s ease-out, transform 0.6s ease-out; */ /* Hapus ini */
+}
+
+/* Hapus ini */
+/* .profile-img.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+} */
+
+h1 {
+  margin-top: 0;
+  text-align: center;
+  font-size: 2em;
+  color: #0066cc;
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: translateY(20px); */ /* Hapus ini */
+  /* transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s; */ /* Hapus ini */
+}
+
+/* Hapus ini */
+/* h1.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+} */
+
+.profile p {
+  margin: 8px 0;
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: translateY(20px); */ /* Hapus ini */
+  /* transition: opacity 0.6s ease-out 0.4s, transform 0.6s ease-out 0.4s; */ /* Hapus ini */
+}
+
+/* Hapus ini */
+/* .profile p.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+} */
+
+.accordion {
+  margin: 24px 0;
+}
+
+.accordion-item {
+  margin-bottom: 12px;
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: translateY(20px); */ /* Hapus ini */
+  /* transition: opacity 0.6s ease-out, transform 0.6s ease-out; */ /* Hapus ini */
+}
+
+/* Hapus ini */
+/* .accordion-item.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+} */
+
+.accordion-btn {
+  width: 100%;
+  font-size: 1.06em;
+  background: #e3f1ff;
+  color: #0066cc;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  transition: background .2s, transform 0.2s ease-in-out; /* Add transform for hover */
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.accordion-btn:hover, .accordion-btn.active {
+  background: #d0e7ff;
+  transform: translateY(-2px); /* Slightly lift button on hover */
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background: #f9fbff;
+  border-radius: 0 0 6px 6px;
+  padding: 0 18px;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+}
+
+.accordion-content p, .accordion-content ul {
+  padding: 18px 0;
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+.accordion-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.accordion-content ul li {
+  margin-bottom: 5px;
+}
+
+.accordion-content strong {
+  color: #0066cc;
+}
+
+.accordion-content .desc {
+  display: block;
+  font-size: 0.85em;
+  color: #666;
+  padding-bottom: 10px;
+}
+
+blockquote {
+  font-style: italic;
+  margin: 32px 0;
+  padding: 12px 20px;
+  border-left: 5px solid #0066cc;
+  background: #f0f7ff;
+  color: #444;
+  font-size: 1.1em;
+  text-align: center;
+  /* opacity: 0; */ /* Hapus ini */
+  /* transform: scale(0.9); */ /* Hapus ini */
+  /* transition: opacity 0.6s ease-out, transform 0.6s ease-out; */ /* Hapus ini */
+}
+
+/* Hapus ini */
+/* blockquote.fade-in {
+  opacity: 1;
+  transform: scale(1);
+} */
+
+.certificates .accordion-content a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.certificates .accordion-content a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  padding: 24px;
+  margin-top: 40px;
+  color: #777;
+  font-size: 0.9em;
+  border-top: 1px solid #eee;
+}
+
+/* Keyframe animations for navigation (biarkan ini tetap ada jika Anda ingin animasi awal navbar) */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 24px;
+  }
+
+  .logo {
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+
+  nav ul {
+    width: 100%;
+    justify-content: center;
+  }
+
+  main {
+    margin: 20px auto 0 auto;
+    padding: 24px 20px;
+  }
+}
