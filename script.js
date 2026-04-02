@@ -1,150 +1,260 @@
 /* ============================================================
    PORTOFOLIO APRIANSYAH — script.js
-   Features: Loading screen, custom cursor, scroll reveal,
-             accordion, navbar scroll, dark/light toggle
+   Firebase Realtime Database + Google Login + Edit Mode
    ============================================================ */
 
-/* ─── LOADING SCREEN ─── */
-window.addEventListener('load', () => {
-  const loader = document.getElementById('loading-screen');
-  if (!loader) return;
-  setTimeout(() => {
-    loader.classList.add('hidden');
-    // Trigger initial reveal animations after loader hides
-    setTimeout(triggerReveal, 200);
-  }, 2000);
-});
+// ─── AUTHORIZED EMAILS ───
+const AUTHORIZED_EMAILS = [
+  "yayankyayank158@gmail.com",
+  "email2@gmail.com",   // ← ganti dengan email kedua
+  // tambah lebih banyak di sini
+];
 
-/* ─── CUSTOM CURSOR ─── */
-const cursorDot  = document.getElementById('cursor-dot');
-const cursorRing = document.getElementById('cursor-ring');
+// ─── FIREBASE CONFIG ───
+// Ambil dari: Firebase Console → Project Settings → Your Apps → SDK setup
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, set, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-let mouseX = 0, mouseY = 0;
-let ringX  = 0, ringY  = 0;
+const firebaseConfig = {
+  apiKey:            "GANTI_API_KEY",
+  authDomain:        "GANTI_PROJECT_ID.firebaseapp.com",
+  databaseURL:       "https://GANTI_PROJECT_ID-default-rtdb.firebaseio.com",
+  projectId:         "GANTI_PROJECT_ID",
+  storageBucket:     "GANTI_PROJECT_ID.appspot.com",
+  messagingSenderId: "GANTI_SENDER_ID",
+  appId:             "GANTI_APP_ID",
+};
 
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  if (cursorDot) {
-    cursorDot.style.left = mouseX + 'px';
-    cursorDot.style.top  = mouseY + 'px';
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const db       = getDatabase(app);
+const provider = new GoogleAuthProvider();
+
+/* ══════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════ */
+
+// Pantau status login secara realtime
+onAuthStateChanged(auth, (user) => {
+  if (user && AUTHORIZED_EMAILS.includes(user.email.toLowerCase())) {
+    onLoginSuccess(user);
+  } else {
+    onLoggedOut();
   }
 });
 
-// Smooth ring follow
-function animateRing() {
-  ringX += (mouseX - ringX) * 0.12;
-  ringY += (mouseY - ringY) * 0.12;
-  if (cursorRing) {
-    cursorRing.style.left = ringX + 'px';
-    cursorRing.style.top  = ringY + 'px';
+// Login dengan popup Google
+window.loginWithGoogle = async function () {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const email  = result.user.email.toLowerCase();
+    if (!AUTHORIZED_EMAILS.includes(email)) {
+      await signOut(auth);
+      showToast(`❌ Akses ditolak untuk ${email}`, 'error');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Login gagal: ' + err.message, 'error');
   }
-  requestAnimationFrame(animateRing);
-}
-animateRing();
+};
 
-// Scale up ring on interactive elements
-document.querySelectorAll('a, button, .accordion-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    if (cursorRing) {
-      cursorRing.style.width  = '50px';
-      cursorRing.style.height = '50px';
-      cursorRing.style.opacity = '1';
-    }
-  });
-  el.addEventListener('mouseleave', () => {
-    if (cursorRing) {
-      cursorRing.style.width  = '32px';
-      cursorRing.style.height = '32px';
-      cursorRing.style.opacity = '0.6';
-    }
-  });
-});
+// Logout
+window.logout = async function () {
+  await signOut(auth);
+};
 
-/* ─── NAVBAR SCROLL ─── */
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (!navbar) return;
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
-  triggerReveal();
-});
+function onLoginSuccess(user) {
+  // Navbar
+  const loginPanel = document.getElementById('login-panel');
+  const userPanel  = document.getElementById('user-panel');
+  const userAvatar = document.getElementById('user-avatar');
+  const userName   = document.getElementById('user-name');
+  if (loginPanel) loginPanel.style.display = 'none';
+  if (userPanel)  userPanel.style.display  = 'flex';
+  if (userAvatar) userAvatar.src = user.photoURL || '';
+  if (userName)   userName.textContent = user.displayName || user.email;
 
-/* ─── SCROLL REVEAL ─── */
-function triggerReveal() {
-  document.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.88) {
-      setTimeout(() => el.classList.add('visible'), i * 80);
-    }
-  });
+  // Tampilkan tombol edit
+  document.querySelectorAll('.edit-btn').forEach(btn => btn.style.display = 'inline-flex');
+
+  showToast(`✅ Login sebagai ${user.displayName}`, 'success');
 }
 
-// Run once on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  triggerReveal();
-  initAccordion();
-  initThemeToggle();
-  initNavAnimation();
-});
+function onLoggedOut() {
+  const loginPanel = document.getElementById('login-panel');
+  const userPanel  = document.getElementById('user-panel');
+  if (loginPanel) loginPanel.style.display = 'flex';
+  if (userPanel)  userPanel.style.display  = 'none';
+  document.querySelectorAll('.edit-btn').forEach(btn => btn.style.display = 'none');
+}
 
-/* ─── ACCORDION ─── */
-function initAccordion() {
-  document.querySelectorAll('.accordion-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const isActive = btn.classList.contains('active');
+/* ══════════════════════════════════════════════
+   FIREBASE DATABASE — BACA & TULIS
+══════════════════════════════════════════════ */
 
-      // Close all
-      document.querySelectorAll('.accordion-btn').forEach(other => {
-        other.classList.remove('active');
-        other.nextElementSibling.style.maxHeight = '0';
-      });
+// Field yang disimpan di Firebase
+const FIELDS = ['name', 'ttl', 'alamat', 'school', 'cita'];
 
-      // Open clicked (if was closed)
-      if (!isActive) {
-        btn.classList.add('active');
-        const content = btn.nextElementSibling;
-        content.style.maxHeight = content.scrollHeight + 'px';
+// Baca semua data dari Firebase dan render ke DOM
+function loadDataFromFirebase() {
+  const dataRef = ref(db, 'portfolio');
+  onValue(dataRef, (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+    FIELDS.forEach(field => {
+      if (data[field]) {
+        const el = document.getElementById('editable-' + field);
+        if (el) el.textContent = data[field];
       }
     });
   });
 }
 
-/* ─── DARK / LIGHT TOGGLE ─── */
+// Simpan satu field ke Firebase
+async function saveFieldToFirebase(field, value) {
+  try {
+    await set(ref(db, `portfolio/${field}`), value);
+    showToast('✅ Tersimpan!', 'success');
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Gagal menyimpan: ' + err.message, 'error');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   EDIT MODAL
+══════════════════════════════════════════════ */
+
+window.openEditModal = function (field, currentValue) {
+  const modal   = document.getElementById('edit-modal');
+  const input   = document.getElementById('edit-input');
+  const title   = document.getElementById('edit-modal-title');
+  const saveBtn = document.getElementById('edit-save-btn');
+  if (!modal || !input) return;
+
+  const labels = {
+    name:   'Edit Nama',
+    ttl:    'Edit Tempat, Tanggal Lahir',
+    alamat: 'Edit Alamat',
+    school: 'Edit Sekolah',
+    cita:   'Edit Cita-Cita',
+  };
+
+  title.textContent = labels[field] || 'Edit';
+  input.value = currentValue || '';
+  modal.style.display = 'flex';
+  input.focus();
+
+  saveBtn.onclick = async () => {
+    const newVal = input.value.trim();
+    if (!newVal) return;
+    // Simpan ke Firebase (DOM otomatis update via onValue listener)
+    await saveFieldToFirebase(field, newVal);
+    modal.style.display = 'none';
+  };
+};
+
+window.closeEditModal = function () {
+  const modal = document.getElementById('edit-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+/* ══════════════════════════════════════════════
+   UI UTILITIES
+══════════════════════════════════════════════ */
+
+function showToast(msg, type) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.className = 'toast ' + type;
+  toast.style.display = 'block';
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => { toast.style.display = 'none'; }, 3200);
+}
+
+/* ══════════════════════════════════════════════
+   LOADING SCREEN
+══════════════════════════════════════════════ */
+
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loading-screen');
+  if (!loader) return;
+  setTimeout(() => {
+    loader.classList.add('hidden');
+    setTimeout(triggerReveal, 200);
+  }, 2000);
+});
+
+/* ── NAVBAR SCROLL ── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 40);
+  triggerReveal();
+});
+
+/* ── SCROLL REVEAL ── */
+function triggerReveal() {
+  document.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.88) {
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    }
+  });
+}
+
+/* ── ACCORDION ── */
+function initAccordion() {
+  document.querySelectorAll('.accordion-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isActive = btn.classList.contains('active');
+      document.querySelectorAll('.accordion-btn').forEach(other => {
+        other.classList.remove('active');
+        other.nextElementSibling.style.maxHeight = '0';
+      });
+      if (!isActive) {
+        btn.classList.add('active');
+        btn.nextElementSibling.style.maxHeight = btn.nextElementSibling.scrollHeight + 'px';
+      }
+    });
+  });
+}
+
+/* ── DARK/LIGHT TOGGLE ── */
 function initThemeToggle() {
   const toggleBtn = document.getElementById('themeToggle');
   const html = document.documentElement;
-
-  // Load saved preference
   const saved = localStorage.getItem('theme') || 'dark';
   html.setAttribute('data-theme', saved);
   if (toggleBtn) toggleBtn.textContent = saved === 'dark' ? '🌙' : '☀️';
-
   if (!toggleBtn) return;
   toggleBtn.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
     toggleBtn.textContent = next === 'dark' ? '🌙' : '☀️';
   });
 }
 
-/* ─── NAVBAR ITEM STAGGER ANIMATION ─── */
+/* ── NAVBAR ANIMATION ── */
 function initNavAnimation() {
   const logo = document.querySelector('.logo');
   if (logo) {
-    logo.style.opacity = '0';
-    logo.style.transform = 'translateX(-16px)';
+    logo.style.cssText = 'opacity:0;transform:translateX(-16px)';
     requestAnimationFrame(() => {
       logo.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       logo.style.opacity = '1';
       logo.style.transform = 'translateX(0)';
     });
   }
-
   document.querySelectorAll('nav ul li').forEach((li, i) => {
-    li.style.opacity = '0';
-    li.style.transform = 'translateY(-12px)';
+    li.style.cssText = 'opacity:0;transform:translateY(-12px)';
     setTimeout(() => {
       li.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
       li.style.opacity = '1';
@@ -152,3 +262,15 @@ function initNavAnimation() {
     }, 100 + i * 100);
   });
 }
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  triggerReveal();
+  initAccordion();
+  initThemeToggle();
+  initNavAnimation();
+  loadDataFromFirebase();
+
+  const modal = document.getElementById('edit-modal');
+  if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeEditModal(); });
+});
