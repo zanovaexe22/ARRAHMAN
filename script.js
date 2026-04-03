@@ -3,15 +3,13 @@
    Firebase Realtime Database + Google Login + Edit Mode
    ============================================================ */
 
-// ─── AUTHORIZED EMAILS ───
+// ─── AUTHORIZED EMAILS (tambah email di sini) ───
 const AUTHORIZED_EMAILS = [
   "yayankyayank158@gmail.com",
-  "email2@gmail.com",   // ← ganti dengan email kedua
-  // tambah lebih banyak di sini
+  // "emailkedua@gmail.com",  ← uncomment dan ganti jika ada email lain
 ];
 
 // ─── FIREBASE CONFIG ───
-// Ambil dari: Firebase Console → Project Settings → Your Apps → SDK setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -19,13 +17,13 @@ import { getDatabase, ref, set, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey:            "GANTI_API_KEY",
-  authDomain:        "GANTI_PROJECT_ID.firebaseapp.com",
-  databaseURL:       "https://GANTI_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId:         "GANTI_PROJECT_ID",
-  storageBucket:     "GANTI_PROJECT_ID.appspot.com",
-  messagingSenderId: "GANTI_SENDER_ID",
-  appId:             "GANTI_APP_ID",
+  apiKey:            "AIzaSyA9fY6tbPd4X5BIbKaKoV2rwz_nO4lnX_g",
+  authDomain:        "zanovaproject27.firebaseapp.com",
+  databaseURL:       "https://zanovaproject27-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "zanovaproject27",
+  storageBucket:     "zanovaproject27.firebasestorage.app",
+  messagingSenderId: "676724554287",
+  appId:             "1:676724554287:web:5f0c8c14586b3fae0124da",
 };
 
 const app      = initializeApp(firebaseConfig);
@@ -37,7 +35,6 @@ const provider = new GoogleAuthProvider();
    AUTH
 ══════════════════════════════════════════════ */
 
-// Pantau status login secara realtime
 onAuthStateChanged(auth, (user) => {
   if (user && AUTHORIZED_EMAILS.includes(user.email.toLowerCase())) {
     onLoginSuccess(user);
@@ -46,7 +43,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Login dengan popup Google
 window.loginWithGoogle = async function () {
   try {
     const result = await signInWithPopup(auth, provider);
@@ -61,13 +57,11 @@ window.loginWithGoogle = async function () {
   }
 };
 
-// Logout
 window.logout = async function () {
   await signOut(auth);
 };
 
 function onLoginSuccess(user) {
-  // Navbar
   const loginPanel = document.getElementById('login-panel');
   const userPanel  = document.getElementById('user-panel');
   const userAvatar = document.getElementById('user-avatar');
@@ -76,10 +70,7 @@ function onLoginSuccess(user) {
   if (userPanel)  userPanel.style.display  = 'flex';
   if (userAvatar) userAvatar.src = user.photoURL || '';
   if (userName)   userName.textContent = user.displayName || user.email;
-
-  // Tampilkan tombol edit
   document.querySelectorAll('.edit-btn').forEach(btn => btn.style.display = 'inline-flex');
-
   showToast(`✅ Login sebagai ${user.displayName}`, 'success');
 }
 
@@ -92,13 +83,11 @@ function onLoggedOut() {
 }
 
 /* ══════════════════════════════════════════════
-   FIREBASE DATABASE — BACA & TULIS
+   FIREBASE DATABASE
 ══════════════════════════════════════════════ */
 
-// Field yang disimpan di Firebase
 const FIELDS = ['name', 'ttl', 'alamat', 'school', 'cita'];
 
-// Baca semua data dari Firebase dan render ke DOM
 function loadDataFromFirebase() {
   const dataRef = ref(db, 'portfolio');
   onValue(dataRef, (snapshot) => {
@@ -113,7 +102,6 @@ function loadDataFromFirebase() {
   });
 }
 
-// Simpan satu field ke Firebase
 async function saveFieldToFirebase(field, value) {
   try {
     await set(ref(db, `portfolio/${field}`), value);
@@ -151,7 +139,6 @@ window.openEditModal = function (field, currentValue) {
   saveBtn.onclick = async () => {
     const newVal = input.value.trim();
     if (!newVal) return;
-    // Simpan ke Firebase (DOM otomatis update via onValue listener)
     await saveFieldToFirebase(field, newVal);
     modal.style.display = 'none';
   };
@@ -272,5 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDataFromFirebase();
 
   const modal = document.getElementById('edit-modal');
-  if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeEditModal(); });
+  if (modal) modal.addEventListener('click', e => {
+    if (e.target === modal) closeEditModal();
+  });
 });
