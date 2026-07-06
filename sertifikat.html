@@ -1,94 +1,107 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Sertifikat Muh.Apriansyah Arrahman</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Sertifikat — Muh. Apriansyah Arrahman</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="bg-glow bg-glow-1"></div>
-  <div class="bg-glow bg-glow-2"></div>
 
-  <nav id="navbar">
-    <div class="nav-logo">Apriansyah.dev</div>
-    <ul>
+<canvas id="netCanvas"></canvas>
+<div class="grain"></div>
+
+<nav>
+  <div class="nav-logo">apriansyah<span>.dev</span></div>
+  <div class="nav-right">
+    <ul class="nav-menu" id="navMenu">
       <li><a href="index.html">Beranda</a></li>
+      <li><a href="index.html#profil">Profil</a></li>
+      <li><a href="index.html#projects">Project</a></li>
+      <li><a href="index.html#contact">Kontak</a></li>
       <li><a href="sertifikat.html" class="active">Sertifikat</a></li>
     </ul>
-  </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-  <main>
-    <div class="cert-hero anim">
-      <div class="hero-eyebrow" style="margin:0 auto 16px;width:fit-content;">
-        <span class="hero-dot"></span>
-        Pelatihan Axioo · SMKN 3 Soppeng
-      </div>
-      <h1 class="cert-title">Sertifikat Saya</h1>
-      <p class="cert-sub">Dokumentasi pencapaian selama pelatihan dan pendidikan.</p>
-    </div>
+<main>
 
-    <div class="cert-gallery">
-      <div class="cert-gallery-item anim anim-1">
-        <div class="cert-gallery-name">🏅 AXIOO SMART</div>
-        <div class="cert-photos cert-photos-1">
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0001.jpg" target="_blank" class="cert-photo">
+  <section style="padding-top:3.5rem;">
+    <div class="eyebrow">PELATIHAN AXIOO · SMKN 3 SOPPENG</div>
+    <h1 class="hero-name" style="font-size:clamp(2rem,4.2vw,3rem);">Sertifikat Saya</h1>
+    <p class="hero-desc">Dokumentasi pencapaian selama pelatihan dan pendidikan. Klik salah satu sertifikat untuk melihat versi penuhnya.</p>
+  </section>
+
+  <section class="reveal" style="padding-top:0.5rem;">
+    <div class="sec-label"><span class="sec-tag">koleksi · 5 program</span><h2>Galeri Sertifikat</h2><div class="sec-line"></div></div>
+
+    <div class="bento">
+
+      <div class="card cert-tile b-2x2">
+        <div class="cert-tile-photos n1">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0001.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0001.jpg" alt="Sertifikat AXIOO SMART" loading="lazy">
           </a>
         </div>
+        <div class="cert-tile-label">🏅 AXIOO SMART</div>
       </div>
 
-      <div class="cert-gallery-item anim anim-2">
-        <div class="cert-gallery-name">🏅 AI4YOUTH</div>
-        <div class="cert-photos cert-photos-2">
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0002.jpg" target="_blank" class="cert-photo">
+      <div class="card cert-tile b-2x1">
+        <div class="cert-tile-photos n2">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0002.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0002.jpg" alt="Sertifikat AI4YOUTH 1" loading="lazy">
           </a>
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0003.jpg" target="_blank" class="cert-photo">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0003.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0003.jpg" alt="Sertifikat AI4YOUTH 2" loading="lazy">
           </a>
         </div>
+        <div class="cert-tile-label">🏅 AI4YOUTH</div>
       </div>
 
-      <div class="cert-gallery-item anim anim-3">
-        <div class="cert-gallery-name">🏅 ACP1</div>
-        <div class="cert-photos cert-photos-2">
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0004.jpg" target="_blank" class="cert-photo">
+      <div class="card cert-tile b-2x1">
+        <div class="cert-tile-photos n2">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0004.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0004.jpg" alt="Sertifikat ACP1 1" loading="lazy">
           </a>
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0005.jpg" target="_blank" class="cert-photo">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0005.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0005.jpg" alt="Sertifikat ACP1 2" loading="lazy">
           </a>
         </div>
+        <div class="cert-tile-label">🏅 ACP1</div>
       </div>
 
-      <div class="cert-gallery-item anim anim-4">
-        <div class="cert-gallery-name">🏅 ACP2</div>
-        <div class="cert-photos cert-photos-2">
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0006.jpg" target="_blank" class="cert-photo">
+      <div class="card cert-tile b-2x1">
+        <div class="cert-tile-photos n2">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0006.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0006.jpg" alt="Sertifikat ACP2 1" loading="lazy">
           </a>
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0007.jpg" target="_blank" class="cert-photo">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0007.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0007.jpg" alt="Sertifikat ACP2 2" loading="lazy">
           </a>
         </div>
+        <div class="cert-tile-label">🏅 ACP2</div>
       </div>
 
-      <div class="cert-gallery-item anim anim-4">
-        <div class="cert-gallery-name">🏅 ACP3</div>
-        <div class="cert-photos cert-photos-2">
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0008.jpg" target="_blank" class="cert-photo">
+      <div class="card cert-tile b-2x1">
+        <div class="cert-tile-photos n2">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0008.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0008.jpg" alt="Sertifikat ACP3 1" loading="lazy">
           </a>
-          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0009.jpg" target="_blank" class="cert-photo">
+          <a href="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0009.jpg" target="_blank">
             <img src="https://raw.githubusercontent.com/harukioriazumi/sertifikat.exe/main/gabungan%20sertifikat_page-0009.jpg" alt="Sertifikat ACP3 2" loading="lazy">
           </a>
         </div>
+        <div class="cert-tile-label">🏅 ACP3</div>
       </div>
-    </div>
-  </main>
 
-  <script src="script.js"></script>
+    </div>
+  </section>
+
+  <div style="height:3rem;"></div>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
